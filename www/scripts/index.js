@@ -10,7 +10,7 @@ function get_set_project_markers(map){
       }
     }
   };
-  xhttp.open("GET", "http://localhost:8000/get_projects/", true);
+  xhttp.open("GET", SITE_SETTINGS["BASE_URL"] + "/get_projects/", true);
   xhttp.send();
 }
 
