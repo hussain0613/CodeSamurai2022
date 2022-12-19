@@ -8,7 +8,7 @@ from utils import get_config, get_cors_settings
 cors_settings = get_cors_settings()
 config = get_config()
 
-app = FastAPI(root_path=config.get("ROOT_PATH"))
+app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_settings["origins"],
@@ -17,12 +17,12 @@ app.add_middleware(
     allow_headers=cors_settings["headers"],
 )
 
-@app.get("/")
+@app.get(f"{config.get('ROOT_PATH')}")
 def index():
     return "Hellow World"
 
 
-@app.get("/get_projects/")
+@app.get(f"{config.get('ROOT_PATH')}/get_projects/")
 def get_projects():
     
     projects = []
