@@ -1,5 +1,11 @@
 import json
 
+def get_config() -> dict:
+    with open("settings.json") as f:
+        settings = json.load(f)
+    return settings
+
+
 def get_cors_settings() -> dict:
     
     try:

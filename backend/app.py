@@ -3,11 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 import json
 import csv
 
-from utils import get_cors_settings
+from utils import get_config, get_cors_settings
 
 cors_settings = get_cors_settings()
+config = get_config()
 
-app = FastAPI()
+app = FastAPI(root_path=config.get("ROOT_PATH"))
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_settings["origins"],
