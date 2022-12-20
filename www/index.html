@@ -4,12 +4,24 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css" />
-    <script type="module" src="scripts/settings.js"></script>
-    <script type="module" src="scripts/index.js"></script>
+    <script src="scripts/settings.js"></script>
+    <script src="scripts/index.js"></script>
   </head>
   <body>
-    <h3>Nearby Projects</h3>
+    <h3>Projects</h3>
     <!--The div element for the map -->
+    <div id="filter_div">
+      <form id = "filter_form">
+        <div>
+          <label for="location">Area: </label>
+          <select name="location" id="location_select">
+            <option value="">All</option>
+          </select>
+        </div>
+        <input type="submit" value="Filter">
+      </form>
+    </div>
+
     <div id="map"></div>
 
     <!-- 
@@ -18,8 +30,11 @@
      and consistent behavior across browsers, consider loading using Promises
      with https://www.npmjs.com/package/@googlemaps/js-api-loader.
     -->
-    <script defer
+    <script async
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDp8_70JiPeJfC7UuHGQLtz4bt0UKIx-1Y&callback=initMap">
+    </script>
+    <script>
+      fetch_location_list()
     </script>
   </body>
 </html>
