@@ -69,3 +69,38 @@ class Component(Base):
     component_type = sa.Column(sa.String)
     depends_on = sa.Column(sa.String, sa.ForeignKey("Component.component_id", ondelete="set null"))
     budget_ratio = sa.Column(sa.Float)
+
+
+
+class UserType(Base):
+    __tablename__ = "user_type"
+
+    code = sa.Column(sa.String, primary_key=True)
+    
+    committee = sa.Column(sa.String)
+    description = sa.Column(sa.String)
+
+
+
+class User(Base):
+    __tablename__ = "user"
+
+    uid = sa.Column(sa.String, primary_key=True)
+    
+    name = sa.Column(sa.String)
+    username = sa.Column(sa.String)
+    email = sa.Column(sa.String)
+    user_type = sa.Column(sa.String, sa.ForeignKey(UserType.code, ondelete="set null"))
+    agency = sa.Column(sa.String, sa.ForeignKey(Agency.code, ondelete="set null"))
+
+
+
+class Issue(Base):
+    __tablename__ = "issue"
+
+    issue_id = sa.Column(sa.String, primary_key=True)
+    
+    uid = sa.Column(sa.String, sa.ForeignKey(User.uid, ondelete="set null"))
+    project_id = sa.Column(sa.String, sa.ForeignKey(Project.project_id, ondelete="set null"))
+    description = sa.Column(sa.String)
+    status = sa.Column(sa.String)
