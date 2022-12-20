@@ -7,7 +7,7 @@ class Project(Base):
 
     project_id = sa.Column(sa.String, primary_key=True)
     
-    name = sa.Column(sa.String,)
+    name = sa.Column(sa.String)
     location = sa.Column(sa.String)
     latitude = sa.Column(sa.Float)
     longitude = sa.Column(sa.Float)
@@ -30,3 +30,42 @@ class Agency(Base):
     type_ = sa.Column("type", sa.String)
     description = sa.Column(sa.String)
 
+
+
+class Proposal(Base):
+    __tablename__ = "proposal"
+
+    project_id = sa.Column(sa.String, primary_key=True)
+    
+    name = sa.Column(sa.String)
+    location = sa.Column(sa.String)
+    latitude = sa.Column(sa.Float)
+    longitude = sa.Column(sa.Float)
+    exec_ = sa.Column("exec", sa.String, sa.ForeignKey(Agency.code, ondelete="set null"))
+    cost = sa.Column(sa.Float)
+    timespan = sa.Column(sa.Float)
+    goal = sa.Column(sa.String)
+    proposal_date = sa.Column(sa.Date)
+
+
+
+class Constraint(Base):
+    __tablename__ = "constraint"
+
+    code = sa.Column(sa.String, primary_key=True)
+    
+    max_limit = sa.Column(sa.Integer)
+    constraint_type = sa.Column(sa.String)
+
+
+
+class Component(Base):
+    __tablename__ = "component"
+
+    component_id = sa.Column(sa.String, primary_key=True)
+    
+    project_id = sa.column(sa.String, sa.ForeignKey(Project.project_id, ondelete="set null"))
+    executing_agency = sa.Column(sa.String, sa.ForeignKey(Agency.code, ondelete="set null"))
+    component_type = sa.Column(sa.String)
+    depends_on = sa.Column(sa.String, sa.ForeignKey("Component.component_id", ondelete="set null"))
+    budget_ratio = sa.Column(sa.Float)
