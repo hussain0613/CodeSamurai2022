@@ -1,8 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
-import json
-import csv
 
 from utils import get_config, get_cors_settings, db_init
 
@@ -24,24 +22,8 @@ app.add_middleware(
     allow_headers=cors_settings["headers"],
 )
 
-@app.get("/")
-def index():
-    
-    if(config.get("INDEX_REDIRECT")): 
-        return RedirectResponse(config["INDEX_REDIRECT"])
-    
-    return "Hellow World"
-    
+from endpoints import include_routers
+include_routers(app)
 
-@app.get("/get_projects/")
-def get_projects():
-    
-    projects = []
-    headers = []
-    
-    with open("projects.csv", "r") as csv_file:
-        projects = list(csv.reader(csv_file))
-    
-    return projects
 
 
