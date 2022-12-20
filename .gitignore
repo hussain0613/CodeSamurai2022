@@ -3,3 +3,4 @@
 *settings.json
 *__pycache__/
 www/scripts/settings.js
+backend/alembic/versions/

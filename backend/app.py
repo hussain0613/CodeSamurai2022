@@ -4,10 +4,12 @@ from fastapi.responses import RedirectResponse
 import json
 import csv
 
-from utils import get_config, get_cors_settings
+from utils import get_config, get_cors_settings, db_init
 
 cors_settings = get_cors_settings()
 config = get_config()
+
+engine, Base, sessionMaker = db_init(config)
 
 if(config.get("ROOT_PATH")):
     app = FastAPI(root_path=config["ROOT_PATH"])
