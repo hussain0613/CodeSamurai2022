@@ -9,7 +9,11 @@ from utils import get_config, get_cors_settings
 cors_settings = get_cors_settings()
 config = get_config()
 
-app = FastAPI()
+if(config.get("ROOT_PATH")):
+    app = FastAPI(root_path=config["ROOT_PATH"])
+else:
+    app = FastAPI()
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_settings["origins"],
