@@ -6,24 +6,17 @@ function get_set_project_markers(map){
     if (this.readyState == 4 && this.status == 200) {
       var projects = JSON.parse(this.responseText);
       for(var i = 1; i < projects.length; ++i){
-        set_marker(projects[0], projects[i], map);
+        set_marker(projects[i], map);
       }
     }
   };
-  xhttp.open("GET", SITE_SETTINGS["BASE_URL"] + "/get_projects/", true);
+  xhttp.open("GET", SITE_SETTINGS["BASE_URL"] + "/project/get/", true);
   xhttp.send();
 }
 
-function set_marker(headers, project, map){
+function set_marker(project, map){
   // The marker, positioned at Uluru
-  var coords = project[8];
-  coords = coords.replaceAll("(", "[");
-  coords = coords.replaceAll(")", "]");
-  coords = coords = "[" + coords + "]";
-  
-  coords = JSON.parse(coords);
-  
-  var pin_coord = {lat: coords[0][0], lng: coords[0][1]}
+  var pin_coord = {lat: project["latitude"], lng: project["longitude"]}
   
   const marker = new google.maps.Marker({
     position: pin_coord,
