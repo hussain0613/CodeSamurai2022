@@ -21,3 +21,13 @@ class ProjectSchema(BaseModel):
 
     class Config:
         orm_mode = True
+
+class AgencySchema(BaseModel):
+    code: str
+    
+    name: str 
+    type_: str
+    description: str
+
+    class Config:
+        orm_mode = True

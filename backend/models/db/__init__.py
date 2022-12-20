@@ -19,3 +19,14 @@ class Project(Base):
     completion = sa.Column(sa.Float)
     actual_cost = sa.Column(sa.Float)
 
+
+
+class Agency(Base):
+    __tablename__ = "agency"
+
+    code = sa.Column(sa.String, primary_key=True)
+    
+    name = sa.Column(sa.String,)
+    type_ = sa.Column("type", sa.String)
+    description = sa.Column(sa.String)
+
