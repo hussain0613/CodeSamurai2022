@@ -2,12 +2,20 @@
 
 function get_set_project_markers(map){
   var xhttp = new XMLHttpRequest();
+  var avg_lat = 0;
+  var avg_long = 0;
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       var projects = JSON.parse(this.responseText);
       for(var i = 0; i < projects.length; ++i){
         set_marker(projects[i], map);
+        avg_lat += projects[i]["latitude"];
+        avg_long += projects[i]["longitude"];
       }
+      avg_lat /= projects.length;
+      avg_long /= projects.length;
+
+      map.setCenter({"lat": avg_lat, "lng": avg_long});
     }
   };
 
@@ -23,11 +31,34 @@ function set_marker(project, map){
     position: pin_coord,
     map: map,
   });
+
+  const contentString =
+    '<div id="content">' +
+    '<div id="siteNotice">' +
+    "</div>" +
+    '<h3 id="firstHeading" class="firstHeading">'+ project["name"] +'</h3>' +
+    '<div id="bodyContent">' +
+    "<p>" + project["location"] + "</p>" +
+    "<p><i>" + project["project_id"] + ", " + project["exec_"] + "</i></p>" +
+    "<p>" + project["goal"] + "</p>" +
+    "</div>" +
+    "</div>";
+  const infowindow = new google.maps.InfoWindow({
+    content: contentString,
+    ariaLabel: project["name"],
+  });
+
+  marker.addListener("click", () => {
+    infowindow.open({
+      anchor: marker,
+      map,
+    });
+  });
 }
 
 function initMap() {
   var default_center = {lat: 23.76, lng: 90.41 };
-  var map_zoom = 8;
+  var map_zoom = 7;
 
   // The map, centered at default_center
   const map = new google.maps.Map(document.getElementById("map"), {
