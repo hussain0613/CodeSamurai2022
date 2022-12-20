@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 import json
 import csv
 
@@ -17,12 +18,16 @@ app.add_middleware(
     allow_headers=cors_settings["headers"],
 )
 
-@app.get(f"{config.get('ROOT_PATH')}")
+@app.get("/")
 def index():
+    
+    if(config.get("INDEX_REDIRECT")): 
+        return RedirectResponse(config["INDEX_REDIRECT"])
+    
     return "Hellow World"
+    
 
-
-@app.get(f"{config.get('ROOT_PATH')}/get_projects/")
+@app.get("/get_projects/")
 def get_projects():
     
     projects = []
