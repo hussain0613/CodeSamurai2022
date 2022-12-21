@@ -1,11 +1,12 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 
 from sqlalchemy.orm.session import Session
 from sqlalchemy.exc import SQLAlchemyError
 
 from app import sessionMaker
 
-from models.db import model_map
+from models.db import model_map, User
+from auth_utils import auth_dependency_factory
 
 router = APIRouter(prefix="/crud", tags=["general_crud"])
 
@@ -20,7 +21,7 @@ def get_model(model_name: str):
 
 
 @router.post("/create/{model_name}/")
-def create(model_name: str, data: dict):
+def create(model_name: str, data: dict, user: User = Depends(auth_dependency_factory(["SYSADMIN"]))):
     model = get_model(model_name)
 
     db_object = model(** data)
@@ -47,7 +48,7 @@ def create(model_name: str, data: dict):
 
 
 @router.get("/get/{model_name}/")
-def get(model_name: str, pk):
+def get(model_name: str, pk, user: User = Depends(auth_dependency_factory(["SYSADMIN"]))):
     model = get_model(model_name)
     
     session: Session = sessionMaker()
@@ -67,8 +68,9 @@ def get(model_name: str, pk):
     
     return db_object
 
+
 @router.post("/get_many/{model_name}/")
-def get_multiple(model_name: str, filter: dict, offset: int = 0, limit: int = None):
+def get_multiple(model_name: str, filter: dict, offset: int = 0, limit: int = None, user: User = Depends(auth_dependency_factory(["SYSADMIN"]))):
     model = get_model(model_name)
     
     session: Session = sessionMaker()
@@ -91,7 +93,7 @@ def get_multiple(model_name: str, filter: dict, offset: int = 0, limit: int = No
 
 
 @router.put("/update/{model_name}/")
-def update(model_name: str, pk, new_data: dict):
+def update(model_name: str, pk, new_data: dict, user: User = Depends(auth_dependency_factory(["SYSADMIN"]))):
     model = get_model(model_name)
     
     session: Session = sessionMaker()
@@ -116,7 +118,7 @@ def update(model_name: str, pk, new_data: dict):
     return {"detail": f"{model_name} row updated succesfully!"}
 
 @router.delete("/delete/{model_name}/")
-def delete(model_name: str, pk):
+def delete(model_name: str, pk, user: User = Depends(auth_dependency_factory(["SYSADMIN"]))):
     model = get_model(model_name)
     
     session: Session = sessionMaker()
