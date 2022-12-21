@@ -44,6 +44,10 @@ class CustomOAuth2PasswordBearer(OAuth2PasswordBearer):
         return await super().__call__(request)
 
 
+tokenUrl = "/auth/token"
+if config.get("ROOT_PATH"):
+    tokenUrl = config["ROOT_PATH"] + tokenUrl
+
 outh2_scheme = CustomOAuth2PasswordBearer(tokenUrl="/auth/token")
 
 
