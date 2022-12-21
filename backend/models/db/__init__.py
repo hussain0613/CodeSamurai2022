@@ -67,7 +67,7 @@ class Component(Base):
     project_id = sa.column(sa.String, sa.ForeignKey(Project.project_id, ondelete="set null"))
     executing_agency = sa.Column(sa.String, sa.ForeignKey(Agency.code, ondelete="set null"))
     component_type = sa.Column(sa.String)
-    depends_on = sa.Column(sa.String, sa.ForeignKey("Component.component_id", ondelete="set null"))
+    depends_on = sa.Column(sa.String, sa.ForeignKey("component.component_id", ondelete="set null"))
     budget_ratio = sa.Column(sa.Float)
 
 
@@ -88,8 +88,8 @@ class User(Base):
     uid = sa.Column(sa.String, primary_key=True)
     
     name = sa.Column(sa.String)
-    username = sa.Column(sa.String)
-    email = sa.Column(sa.String)
+    username = sa.Column(sa.String, unique = True)
+    email = sa.Column(sa.String, unique = True)
     user_type = sa.Column(sa.String, sa.ForeignKey(UserType.code, ondelete="set null"))
     agency = sa.Column(sa.String, sa.ForeignKey(Agency.code, ondelete="set null"))
 
@@ -98,7 +98,7 @@ class User(Base):
 class Issue(Base):
     __tablename__ = "issue"
 
-    issue_id = sa.Column(sa.String, primary_key=True)
+    issue_id = sa.Column(sa.Integer, primary_key=True, autoincrement = True)
     
     uid = sa.Column(sa.String, sa.ForeignKey(User.uid, ondelete="set null"))
     project_id = sa.Column(sa.String, sa.ForeignKey(Project.project_id, ondelete="set null"))
