@@ -11,7 +11,7 @@ class Project(Base):
     location = sa.Column(sa.String)
     latitude = sa.Column(sa.Float)
     longitude = sa.Column(sa.Float)
-    exec_ = sa.Column("exec", sa.String)
+    exec_ = sa.Column("exec", sa.String, sa.ForeignKey("agency.code", ondelete="set null"))
     cost = sa.Column(sa.Float)
     timespan = sa.Column(sa.Float)
     goal = sa.Column(sa.String)
@@ -104,3 +104,15 @@ class Issue(Base):
     project_id = sa.Column(sa.String, sa.ForeignKey(Project.project_id, ondelete="set null"))
     description = sa.Column(sa.String)
     status = sa.Column(sa.String)
+
+
+model_map: dict = {
+    "project": Project,
+    "agency": Agency,
+    "proposal": Proposal,
+    "constraint": Constraint,
+    "component": Component,
+    "user_type": UserType,
+    "user": User,
+    "issue": Issue
+}

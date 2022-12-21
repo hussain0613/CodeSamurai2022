@@ -3,6 +3,7 @@ from fastapi.responses import RedirectResponse
 import csv
 
 from app import config
+from models.db import model_map
 
 router = APIRouter(tags=["general"])
 
@@ -23,3 +24,7 @@ def get_projects():
         projects = list(csv.reader(csv_file))
     
     return projects
+
+@router.get("/get_model_names/")
+def get_model_names():
+    return list(model_map.keys())
