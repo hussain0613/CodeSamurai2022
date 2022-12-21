@@ -48,7 +48,7 @@ tokenUrl = "/auth/token"
 if config.get("ROOT_PATH"):
     tokenUrl = config["ROOT_PATH"] + tokenUrl
 
-outh2_scheme = CustomOAuth2PasswordBearer(tokenUrl="/auth/token")
+outh2_scheme = CustomOAuth2PasswordBearer(tokenUrl=tokenUrl)
 
 
 def auth_dependency_factory(required_utypes: list[str] = None, dbSession: Session = None):
