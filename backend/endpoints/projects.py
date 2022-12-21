@@ -5,7 +5,6 @@ from sqlalchemy.orm.query import Query
 
 from app import sessionMaker
 from models.db import Project
-from models.schema import ProjectSchema
 
 router = APIRouter(prefix = "/project", tags=["project"])
 

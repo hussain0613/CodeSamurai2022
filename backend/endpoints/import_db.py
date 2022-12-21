@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
 
 import pandas as pd
 
@@ -6,14 +6,14 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.exc import IntegrityError
 
 from app import engine
-
+from auth_utils import auth_dependency_factory
 from models.db import model_map
 
 router = APIRouter(prefix="/import", tags=["import"])
 
 
 @router.post("/import_from_spreadsheet/")
-def import_from_spreadsheet(model_name: str, file: UploadFile = File(...)):
+def import_from_spreadsheet(model_name: str, file: UploadFile = File(...), _ = Depends(auth_dependency_factory(["SYSADMIN"]))):
     """
     Import data from a spreadsheet.<br>
     

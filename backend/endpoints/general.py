@@ -1,9 +1,10 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import RedirectResponse
 import csv
 
 from app import config
 from models.db import model_map
+from auth_utils import auth_dependency_factory
 
 router = APIRouter(tags=["general"])
 
@@ -26,5 +27,5 @@ def get_projects():
     return projects
 
 @router.get("/get_model_names/")
-def get_model_names():
+def get_model_names(_ = Depends(auth_dependency_factory(["SYSADMIN"]))):
     return list(model_map.keys())
