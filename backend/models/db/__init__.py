@@ -1,4 +1,7 @@
 import sqlalchemy as sa
+import secrets
+import bcrypt
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from app import Base
 
@@ -64,7 +67,7 @@ class Component(Base):
 
     component_id = sa.Column(sa.String, primary_key=True)
     
-    project_id = sa.column(sa.String, sa.ForeignKey(Project.project_id, ondelete="set null"))
+    project_id = sa.Column(sa.String, sa.ForeignKey(Project.project_id, ondelete="set null"))
     executing_agency = sa.Column(sa.String, sa.ForeignKey(Agency.code, ondelete="set null"))
     component_type = sa.Column(sa.String)
     depends_on = sa.Column(sa.String, sa.ForeignKey("component.component_id", ondelete="set null"))
@@ -85,13 +88,22 @@ class UserType(Base):
 class User(Base):
     __tablename__ = "user"
 
-    uid = sa.Column(sa.String, primary_key=True)
+    uid = sa.Column(sa.String, primary_key=True, default = secrets.token_urlsafe)
     
     name = sa.Column(sa.String)
-    username = sa.Column(sa.String, unique = True)
-    email = sa.Column(sa.String, unique = True)
+    username = sa.Column(sa.String, unique = True, nullable = False)
+    email = sa.Column(sa.String, unique = True, nullable = False)
+    _password = sa.Column("password", sa.String, nullable = False)
     user_type = sa.Column(sa.String, sa.ForeignKey(UserType.code, ondelete="set null"))
     agency = sa.Column(sa.String, sa.ForeignKey(Agency.code, ondelete="set null"))
+
+    @hybrid_property
+    def password(self) -> str:
+        return self._password
+    
+    @password.setter
+    def password(self, password: str):
+        self._password = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
 
 
